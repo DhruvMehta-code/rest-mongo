@@ -11,11 +11,12 @@ import (
 func main() {
 
 	r := mux.NewRouter()
-	r.HandleFunc("/api/user", serve.GetAll).Methods("GET")
-	r.HandleFunc("/api/user/{id}", serve.GetOneUser).Methods("GET")
-	r.HandleFunc("/api/user", serve.PostUsers).Methods("POST")
-	r.HandleFunc("/api/user/{id}", serve.PutUsers).Methods("PUT")
-	r.HandleFunc("/api/user/{id}", serve.DelUsers).Methods("DELETE")
+	apirouter := r.PathPrefix("/api").Subrouter()
+	apirouter.HandleFunc("/user", serve.GetAll).Methods("GET")
+	apirouter.HandleFunc("/user/{id}", serve.GetOneUser).Methods("GET")
+	apirouter.HandleFunc("/user", serve.PostUsers).Methods("POST")
+	apirouter.HandleFunc("/update/{id}", serve.PutUsers).Methods("PUT")
+	apirouter.HandleFunc("/delete/{id}", serve.DelUsers).Methods("DELETE")
 
 	log.Fatal(http.ListenAndServe(":3000", r))
 }

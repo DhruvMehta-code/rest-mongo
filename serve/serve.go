@@ -3,6 +3,7 @@ package serve
 import (
 	"context"
 	"encoding/json"
+
 	"log"
 	"net/http"
 	"rest-go/helper"
@@ -55,7 +56,8 @@ func GetOneUser(w http.ResponseWriter, r *http.Request) {
 	}
 	err := collection.FindOne(context.TODO(), filter).Decode(&user)
 	if err != nil {
-		helper.GetError(err, w)
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
 	}
 	json.NewEncoder(w).Encode(user)
 }
